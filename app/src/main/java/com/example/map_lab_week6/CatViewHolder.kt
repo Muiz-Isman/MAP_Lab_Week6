@@ -7,15 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.map_lab_week6.model.CatBreed
 import com.example.map_lab_week6.model.CatModel
 import com.example.map_lab_week6.model.Gender
-import com.example.map_lab_week6.ImageLoader
 
 private const val FEMALE_SYMBOL = "♀"
 private const val MALE_SYMBOL = "♂"
 private const val UNKNOWN_SYMBOL = "?"
 
 class CatViewHolder(
-    containerView: View,
-    private val imageLoader: ImageLoader
+    private val containerView: View,
+    private val imageLoader: ImageLoader,
+    private val onClickListener: CatAdapter.OnClickListener // <-- Perubahan di sini
 ) : RecyclerView.ViewHolder(containerView) {
 
     private val catPhotoView: ImageView = containerView.findViewById(R.id.cat_photo)
@@ -25,6 +25,10 @@ class CatViewHolder(
     private val catGenderView: TextView = containerView.findViewById(R.id.cat_gender)
 
     fun bindData(cat: CatModel) {
+        containerView.setOnClickListener {
+            onClickListener.onItemClick(cat)
+        }
+
         imageLoader.loadImage(cat.imageUrl, catPhotoView)
         catNameView.text = cat.name
         catBiographyView.text = cat.biography
@@ -41,4 +45,6 @@ class CatViewHolder(
             Gender.Unknown -> UNKNOWN_SYMBOL
         }
     }
+
+    // Blok interface di sini sudah dihapus
 }

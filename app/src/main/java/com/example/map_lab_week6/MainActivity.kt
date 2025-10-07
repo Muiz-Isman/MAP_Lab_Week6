@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.map_lab_week6.model.CatBreed
 import com.example.map_lab_week6.model.CatModel
 import com.example.map_lab_week6.model.Gender
+import androidx.appcompat.app.AlertDialog
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,18 +17,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val catAdapter by lazy {
-        CatAdapter(layoutInflater, GlideImageLoader(this))
+        // Implementasi OnClickListener langsung di sini
+        CatAdapter(layoutInflater, GlideImageLoader(this), object : CatAdapter.OnClickListener {
+            override fun onItemClick(cat: CatModel) {
+                // Saat item di-klik, panggil fungsi untuk menampilkan dialog
+                showSelectionDialog(cat)
+            }
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Setup adapter dan layout manager untuk RecyclerView
         recyclerView.adapter = catAdapter
         recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 
-        // Tambahkan data ke adapter
         catAdapter.setData(
             listOf(
                 CatModel(
@@ -52,5 +58,14 @@ class MainActivity : AppCompatActivity() {
                 )
             )
         )
+    }
+
+    // Fungsi untuk menampilkan pop-up dialog
+    private fun showSelectionDialog(cat: CatModel) {
+        AlertDialog.Builder(this)
+            .setTitle("Cat Selected") // <-- Hapus [cite]
+            .setMessage("You have selected cat ${cat.name}") // <-- Hapus [cite]
+            .setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+            .show()
     }
 }

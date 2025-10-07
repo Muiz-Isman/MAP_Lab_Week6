@@ -7,7 +7,8 @@ import com.example.map_lab_week6.model.CatModel
 
 class CatAdapter(
     private val layoutInflater: LayoutInflater,
-    private val imageLoader: ImageLoader
+    private val imageLoader: ImageLoader,
+    private val onClickListener: OnClickListener // <-- Tambahan baru
 ) : RecyclerView.Adapter<CatViewHolder>() {
 
     private val cats = mutableListOf<CatModel>()
@@ -20,12 +21,18 @@ class CatAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
         val view = layoutInflater.inflate(R.layout.item_list, parent, false)
-        return CatViewHolder(view, imageLoader)
+        // Meneruskan listener ke ViewHolder
+        return CatViewHolder(view, imageLoader, onClickListener)
     }
 
     override fun getItemCount() = cats.size
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         holder.bindData(cats[position])
+    }
+
+    // Interface untuk MainActivity
+    interface OnClickListener {
+        fun onItemClick(cat: CatModel)
     }
 }
